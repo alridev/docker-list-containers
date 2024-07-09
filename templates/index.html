@@ -11,8 +11,9 @@
       <ul>
         {% for container in containers %}
           <li>
+            <img id="favicon-{{ container.name }}" alt="favicon" style="display:none;width:16px;height:16px;" />
             {{ container.name }}
-            <a href="{{ container.url }}">{{ container.url }}</a>
+            <a href="{{ container.url }}">{{ container.url_name }}</a>
             <span id="{{ container.name }}" class="status-pending">⏳</span>
           </li>
         {% endfor %}
@@ -21,15 +22,28 @@
   </body>
   <script>
     async function checkUrl(containerName, url) {
+        const statusSpan = document.getElementById(containerName);
+        const faviconImg = document.getElementById(`favicon-${containerName}`);
         try {
             const response = await fetch(url);
-            const statusSpan = document.getElementById(containerName);
+            const text = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(text, "text/html");
+            const iconLink = doc.querySelector("link[rel~='icon']") || doc.querySelector("link[rel='shortcut icon']");
+            if (iconLink) {
+                faviconImg.src = new URL(iconLink.href, url).href;
+                faviconImg.style.display = 'inline';
+            }else {
+                const response = await fetch(`${url}/favicon.ico`);
+                if (response.ok) {
+                faviconImg.src = `${url}/favicon.ico`;
+                faviconImg.style.display = 'inline';
+                }
+            }
             statusSpan.textContent = '✅';
             statusSpan.classList.remove('status-pending');
             statusSpan.classList.add('status-ok');
-        
         } catch (error) {
-            const statusSpan = document.getElementById(containerName);
             statusSpan.textContent = '❌';
             statusSpan.classList.remove('status-pending');
             statusSpan.classList.add('status-fail');
@@ -38,7 +52,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         {% for container in containers %}
-            checkUrl("{{ container.name }}", "{{ container.url_check }}");
+            checkUrl("{{ container.name }}", "{{ container.url }}");
         {% endfor %}
     });
 </script>
