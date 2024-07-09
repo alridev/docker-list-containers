@@ -13,7 +13,7 @@
           <li>
             {{ container.name }}
             <a href="{{ container.url }}">{{ container.url_name }}</a>
-            <span class="{{ 'status-ok' if container.status else 'status-fail' }}">
+            <span class="{{ 'status-ok' if container.status else 'status-fail' }}" style="display:block">
                         {{ '✅' if container.status else '❌' }}
             </span>
             <img src="{{ container.url }}/favicon.ico" id="favicon-{{ container.name }}" alt="favicon" style="display:none;width:16px;height:16px;" />
