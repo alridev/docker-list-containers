@@ -9,6 +9,13 @@ body {
     margin: 0;
 }
 
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 80%;
+}
+
 ul {
     list-style-type: none;
     padding: 20px;
@@ -17,13 +24,17 @@ ul {
     margin: 0;
     color: #BEBCBC;
     text-align: left;
+    width: 45%;
+    box-sizing: border-box;
+    margin: 10px;
 }
 
 li {
     margin: 10px 0;
     gap: 10px;
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
+    align-items: center;
 }
 
 a {
@@ -41,4 +52,14 @@ a:hover {
 
 .status-fail {
     color: red;
+}
+
+.status-pending {
+    color: yellow;
+}
+
+img {
+    margin-left: 10px;
+    width: 16px;
+    height: 16px;
 }
