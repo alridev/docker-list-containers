@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Docker Containers</title>
+    <link rel="stylesheet" href="/static/index.css" />
+  </head>
+  <body>
+    <div class="container">
+      <ul>
+        {% for container in containers %}
+          <li>
+            {{ container.name }}
+            <a href="{{ container.url }}">{{ container.url }}</a>
+            <span id="{{ container.name }}" class="status-pending">⏳</span>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+  <script>
+    async function checkUrl(containerName, url) {
+        try {
+            const response = await fetch(url);
+            const statusSpan = document.getElementById(containerName);
+            statusSpan.textContent = '✅';
+            statusSpan.classList.remove('status-pending');
+            statusSpan.classList.add('status-ok');
+        
+        } catch (error) {
+            const statusSpan = document.getElementById(containerName);
+            statusSpan.textContent = '❌';
+            statusSpan.classList.remove('status-pending');
+            statusSpan.classList.add('status-fail');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        {% for container in containers %}
+            checkUrl("{{ container.name }}", "{{ container.url_check }}");
+        {% endfor %}
+    });
+</script>
+</html>
