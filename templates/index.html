@@ -12,7 +12,7 @@
         {% for container in containers %}
           <li>
             {{ container.name }}
-            <a href="{{ container.url }}">{{ container.url_name }}</a>
+            <a href="{{ container.url }}" target='_blank'>{{ container.url_name }}</a>
             <span class="{{ 'status-ok' if container.status else 'status-fail' }}" style="display:block">
                         {{ '✅' if container.status else '❌' }}
             </span>
