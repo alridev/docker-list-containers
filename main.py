@@ -13,18 +13,14 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 def get_containers_info():
-    depends_on_services = set()
     for container in client.containers.list(all=True):
-        if 'com.docker.compose.service' in container.labels:
-            service_name = container.labels['com.docker.compose.service']
-            depends_on = container.labels.get('com.docker.compose.depends_on', '')
-            if depends_on:
-                depends_on_services.update(depends_on.split(','))
+            if container.name == 'show-containers':
+                project_select = container.labels.get('com.docker.compose.project', '')
 
     containers_info = []
     for container in client.containers.list():
-        service_name = container.labels.get('com.docker.compose.service', '')
-        if service_name in depends_on_services:
+        project = container.labels.get('com.docker.compose.project', '')
+        if project_select == project:
             for port, bindings in container.attrs['NetworkSettings']['Ports'].items():
                 if bindings:
                     for binding in bindings:
