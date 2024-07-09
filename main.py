@@ -23,6 +23,7 @@ def get_containers_info():
                         "name": container.name,
                         "url": url,
                         "url_name": f"{binding['HostPort']}",
+                        "status": container.status == 'running',
                     })
     return containers_info
 
