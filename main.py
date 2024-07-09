@@ -18,7 +18,10 @@ def get_containers_info():
                 project_select = container.labels.get('com.docker.compose.project', '')
 
     containers_info = []
+    added = []
     for container in client.containers.list():
+        if container.name in added:
+            continue
         project = container.labels.get('com.docker.compose.project', '')
         if project_select == project:
             for port, bindings in container.attrs['NetworkSettings']['Ports'].items():
@@ -31,6 +34,7 @@ def get_containers_info():
                             "url_name": f"{binding['HostPort']}",
                             "status": container.status == 'running',
                         })
+                        added.append(container.name)
     return containers_info
 
 @app.get("/", response_class=HTMLResponse)
