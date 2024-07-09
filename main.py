@@ -18,7 +18,7 @@ def get_containers_info():
         for port, bindings in container.attrs['NetworkSettings']['Ports'].items():
             if bindings:
                 for binding in bindings:
-                    url = f"http://umbrel.local:{10001}"
+                    url = f"http://umbrel.local:{binding['HostPort']}"
                     containers_info.append({
                         "name": container.name,
                         "url": url,
