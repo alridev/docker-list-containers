@@ -11,7 +11,7 @@
       <ul>
         {% for container in containers %}
           <li>
-            <img id="favicon-{{ container.name }}" alt="favicon" style="display:none;width:16px;height:16px;" />
+            <img src="{{ container.url }}/favicon.ico" id="favicon-{{ container.name }}" alt="favicon" style="display:none;width:16px;height:16px;" />
             {{ container.name }}
             <a href="{{ container.url }}">{{ container.url_name }}</a>
             <span id="{{ container.name }}" class="status-pending">⏳</span>
@@ -25,21 +25,7 @@
         const statusSpan = document.getElementById(containerName);
         const faviconImg = document.getElementById(`favicon-${containerName}`);
         try {
-            const response = await fetch(url);
-            const text = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(text, "text/html");
-            const iconLink = doc.querySelector("link[rel~='icon']") || doc.querySelector("link[rel='shortcut icon']");
-            if (iconLink) {
-                faviconImg.src = new URL(iconLink.href, url).href;
-                faviconImg.style.display = 'inline';
-            }else {
-                const response = await fetch(`${url}/favicon.ico`);
-                if (response.ok) {
-                faviconImg.src = `${url}/favicon.ico`;
-                faviconImg.style.display = 'inline';
-                }
-            }
+            const response = await fetch(url);    
             statusSpan.textContent = '✅';
             statusSpan.classList.remove('status-pending');
             statusSpan.classList.add('status-ok');
