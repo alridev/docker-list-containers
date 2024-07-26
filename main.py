@@ -27,7 +27,7 @@ def get_containers_info():
                     for binding in bindings:
                         port_key = f"{container.name}:{binding['HostPort']}"
                         if port_key not in seen_ports:
-                            url = f"http://umbrel.local:{binding['HostPort']}"
+                            url = f"http://debian.local:{binding['HostPort']}"
                             containers_info.append({
                                 "name": container.name,
                                 "url": url,
